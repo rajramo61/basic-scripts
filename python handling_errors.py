@@ -9,7 +9,8 @@ def party_planner(cookies, people):
         print('There can not be 0 people in party')
     leftovers = cookies % people
 
-    return(num_each, leftovers)
+    return num_each, leftovers
+
 
 # The main code block is below; do not edit this
 lets_party = 'y'
@@ -21,7 +22,8 @@ while lets_party == 'y':
     cookies_each, leftovers = party_planner(cookies, people)
 
     if cookies_each:  # if cookies_each is not None
-        message = "\nLet's party! We'll have {} people attending, they'll each get to eat {} cookies, and we'll have {} left over."
+        message = "\nLet's party! We'll have {} people attending, they'll each get to eat {} cookies, and we'll have " \
+                  "{} left over. "
         print(message.format(people, cookies_each, leftovers))
 
     lets_party = input("\nWould you like to party more? (y or n) ")
