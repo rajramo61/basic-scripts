@@ -83,13 +83,11 @@ class LinkedList:
             return
         current_node = self.head
         prev_node = self.head
-        #last_node = None
         while current_node.next is not None:
             if current_node.value == value:
                 prev_node.next = current_node.next
                 current_node.next = None
                 return
-            #last_node = prev_node
             prev_node = current_node
             current_node = current_node.next
         if current_node.value == value:
@@ -221,14 +219,12 @@ linked_list.append(3)
 linked_list.prepend(2)
 assert linked_list.to_list() == [2, 1, 3], f"list contents: {linked_list.to_list()}"
 
-
 # Test append
 linked_list = LinkedList()
 linked_list.append(1)
 assert linked_list.to_list() == [1], f"list contents: {linked_list.to_list()}"
 linked_list.append(3)
 assert linked_list.to_list() == [1, 3], f"list contents: {linked_list.to_list()}"
-
 
 # Test search
 linked_list.prepend(2)
@@ -238,7 +234,6 @@ linked_list.append(3)
 assert linked_list.search(1).value == 1, f"list contents: {linked_list.to_list()}"
 assert linked_list.search(4).value == 4, f"list contents: {linked_list.to_list()}"
 
-
 # Test remove
 linked_list.remove(1)
 assert linked_list.to_list() == [2, 1, 3, 4, 3], f"list contents: {linked_list.to_list()}"
@@ -247,21 +242,18 @@ assert linked_list.to_list() == [2, 1, 4, 3], f"list contents: {linked_list.to_l
 linked_list.remove(3)
 assert linked_list.to_list() == [2, 1, 4], f"list contents: {linked_list.to_list()}"
 
-
 # Test pop
 value = linked_list.pop()
 assert value == 2, f"list contents: {linked_list.to_list()}"
 assert linked_list.head.value == 1, f"list contents: {linked_list.to_list()}"
 
-
-# Test insert 
+# Test insert
 linked_list.insert(5, 0)
 assert linked_list.to_list() == [5, 1, 4], f"list contents: {linked_list.to_list()}"
 linked_list.insert(2, 1)
 assert linked_list.to_list() == [5, 2, 1, 4], f"list contents: {linked_list.to_list()}"
 linked_list.insert(3, 6)
 assert linked_list.to_list() == [5, 2, 1, 4, 3], f"list contents: {linked_list.to_list()}"
-
 
 # Test size
 assert linked_list.size() == 5, f"list contents: {linked_list.to_list()}"
