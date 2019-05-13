@@ -105,5 +105,4 @@ llist = LinkedList()
 for value in [4,2,5,1,-3,0]:
     llist.append(value)
 
-print(reverse(llist))
 print ("Pass" if (llist == reverse(llist)) else "Fail")
