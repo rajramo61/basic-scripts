@@ -34,3 +34,20 @@ class Stack:
         self.arr = [0 for _ in range(2 * len(old_arr))]
         for index, element in enumerate(old_arr):
             self.arr[index] = element
+
+
+class Stack_new:
+    def __init__(self):
+        self.items = []
+    
+    def size(self):
+        return len(self.items)
+    
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        if self.size()==0:
+            return None
+        else:
+            return self.items.pop()
