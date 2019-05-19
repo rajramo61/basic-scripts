@@ -79,12 +79,12 @@ class Queue:
 
 def reverse_queue(queue):
     """
-    Reverese the input queue
+    Reverse the input queue
 
     Args:
        queue(queue),str2(string): Queue to be reversed
     Returns:
-       queue: Reveresed queue
+       queue: Reversed queue
     """
 
     # TODO: Write reversed queue function
