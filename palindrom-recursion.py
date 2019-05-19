@@ -9,8 +9,8 @@ def is_palindrome(input):
     # TODO: Write your recursive palindrome checker here
     if len(input) <= 1:
         return True
-    if input[0] == input[len(input) - 1]:
-        return is_palindrome(input[1:len(input) - 1])
+    if input[0] == input[-1]:
+        return is_palindrome(input[1:-1])
     else:
         return False
     pass
