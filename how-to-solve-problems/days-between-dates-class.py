@@ -1,4 +1,3 @@
-# Credit goes to Websten from forums
 #
 # Program defensively:
 #
@@ -9,6 +8,7 @@
 # an assertion failure when the inputs are invalid. This should
 # occur when the first date is not before the second date.
 #
+
 
 def nextDay(year, month, day):
     """Simple version: assume every month has 30 days"""
