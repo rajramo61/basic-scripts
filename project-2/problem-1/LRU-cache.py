@@ -56,18 +56,19 @@ class LRU_Cache(object):
 
     def set(self, key, value):
         # Set the value if the key is not present in the cache. If the cache is at capacity remove the oldest item.
-        if key in self.table:
-            self.table[key].value = value
-        else:
-            if self.capacity == len(self.table):
-                del self.table[self.tail.key]
-                self.tail = self.tail.prev
-            node = DLL(key, value)
-            self.table[key] = node
-            node.next = self.head
-            self.head = node
-            if self.tail is None:
-                self.tail = node
+        if key:
+            if key in self.table:
+                self.table[key].value = value
+            else:
+                if self.capacity == len(self.table):
+                    del self.table[self.tail.key]
+                    self.tail = self.tail.prev
+                node = DLL(key, value)
+                self.table[key] = node
+                node.next = self.head
+                self.head = node
+                if self.tail is None:
+                    self.tail = node
         pass
 
 
@@ -79,14 +80,20 @@ our_cache.set(3, 3)
 our_cache.set(4, 4)
 our_cache.set(5, 5)
 our_cache.set(6, 6)
-print(our_cache.get(1))       # returns -1
-print(our_cache.get(2))       # returns 2
-print(our_cache.get(3))       # return 3
-print(our_cache.get(9))       # return -1
+print(our_cache.get(1))  # returns -1
+print(our_cache.get(2))  # returns 2
+print(our_cache.get(3))  # return 3
+print(our_cache.get(9))  # return -1
 our_cache.set(9, 9)
-print(our_cache.get(9))       # return 9
+print(our_cache.get(9))  # return 9
 
 """
+Data Structure:
+    Read and write operations to do in constant time, we need HashMap. 
+    In Python, we have dictionary for this purpose.
+    To add entry at the beginning and deletion at the end to maintain the size of cache, 
+    we can use doubly linked list. My solution uses the combination of both.
+
 Time Complexity:
     get and set both methods use constant time to do the job. The time complexity is O(1)
     get - does a lookup using dictionary so the lookup time in O(1)
