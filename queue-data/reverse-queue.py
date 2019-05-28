@@ -82,7 +82,7 @@ def reverse_queue(queue):
     Reverse the input queue
 
     Args:
-       queue(queue),str2(string): Queue to be reversed
+       queue(queue),str2(string): queue-data to be reversed
     Returns:
        queue: Reversed queue
     """

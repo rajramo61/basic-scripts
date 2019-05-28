@@ -32,7 +32,7 @@ class Queue(object):
 
     def dequeue(self):
         if self.head is None:
-            print("Queue is empty")
+            print("queue-data is empty")
             return None
         else:
             value = self.head.value

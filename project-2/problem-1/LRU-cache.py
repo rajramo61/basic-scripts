@@ -49,7 +49,24 @@ class LRU_Cache(object):
     def get(self, key):
         # Retrieve item from provided key. Return -1 if nonexistent.
         if key in self.table:
-            return self.table.get(key).value
+            value = self.table.get(key).value
+            node = self.table.get(key)
+            if node is self.head:
+                return value
+            elif node is self.tail:
+                self.head.prev = node
+                node.next = self.head
+                self.tail = node.prev
+                self.head = node
+                node.prev = None
+            else:
+                node.prev.next = node.next
+                node.next.prev = node.prev
+                node.next = self.head
+                self.head.prev = node
+                self.head = node
+                node.prev = None
+            return value
         else:
             return -1
         pass
@@ -59,23 +76,48 @@ class LRU_Cache(object):
         if key:
             if key in self.table:
                 self.table[key].value = value
+                node = self.table[key]
+                if node is self.head:
+                    return
+                else:
+                    if node is self.tail:
+                        temp = self.tail
+                        self.tail = self.tail.prev
+                        self.tail.next = None
+                        temp.next = self.head
+                        self.head.prev = temp
+                        self.head = temp
+                    else:
+                        if node.prev is not None:
+                            node.prev.next = node.next
+                            node.prev.prev = self.head
+                        node.next.prev = node.prev
+                        node.next = self.head
+                        node.prev = None
+                        self.head = node
             else:
                 if self.capacity == len(self.table):
                     del self.table[self.tail.key]
+                    temp = self.tail
                     self.tail = self.tail.prev
+                    if self.tail is not None:
+                        self.tail.next = None
+                    temp.prev = None
                 node = DLL(key, value)
                 self.table[key] = node
-                node.next = self.head
-                self.head = node
-                if self.tail is None:
+                if len(self.table) == 1:
+                    self.head = node
                     self.tail = node
+                else:
+                    node.next = self.head
+                    self.head.prev = node
+                    self.head = node
         pass
 
 
 our_cache = LRU_Cache(5)
-
 our_cache.set(1, 1)
-our_cache.set(2, 2)
+our_cache.set(2,2)
 our_cache.set(3, 3)
 our_cache.set(4, 4)
 our_cache.set(5, 5)
@@ -87,12 +129,71 @@ print(our_cache.get(9))  # return -1
 our_cache.set(9, 9)
 print(our_cache.get(9))  # return 9
 
+our_cache2 = LRU_Cache(2)
+our_cache2.set(1, 1)
+our_cache2.set(2,2)
+print(our_cache2.get(1))    # return 1
+our_cache2.set(3,3)
+print(our_cache2.get(2))    # return -1
+
+our_cache3 = LRU_Cache(3)
+our_cache3.set(1, 1)
+our_cache3.set(2, 2)
+our_cache3.set(3, 3)
+our_cache3.set(4, 4)
+print(our_cache3.get(4))    # return 4
+print(our_cache3.get(3))    # return 3
+print(our_cache3.get(2))    # return 2
+print(our_cache3.get(1))    # return -1
+our_cache3.set(5, 5)
+print(our_cache3.get(1))    # return -1
+print(our_cache3.get(2))    # return 2
+print(our_cache3.get(3))    # return 3
+print(our_cache3.get(4))    # return -1
+print(our_cache3.get(5))    # return 5
+
+our_cache4 = LRU_Cache(1)
+our_cache4.set(2, 1)
+print(our_cache4.get(2))    # return 1
+our_cache4.set(3, 2)
+print(our_cache4.get(3))    # return 2
+
+our_cache5 = LRU_Cache(2)
+our_cache5.set(2, 1)
+our_cache5.set(1, 1)
+our_cache5.set(2, 3)
+our_cache5.set(4, 1)
+print(our_cache5.get(1))    # return -1
+print(our_cache5.get(2))    # return 3
+
+our_cache6 = LRU_Cache(10)
+our_cache6.set(7, 28)
+our_cache6.set(7, 1)
+our_cache6.set(8, 15)
+print(our_cache6.get(6))    # return -1
+our_cache6.set(10, 27)
+our_cache6.set(8, 10)
+print(our_cache6.get(8))    # return 10
+our_cache6.set(6, 29)
+our_cache6.set(1, 9)
+print(our_cache6.get(6))    # return 29
+our_cache6.set(10, 7)
+print(our_cache6.get(1))    # return 9
+print(our_cache6.get(2))    # return -1
+print(our_cache6.get(13))    # return -1
+our_cache6.set(8, 30)
+our_cache6.set(1, 5)
+print(our_cache6.get(1))    # return 5
+our_cache6.set(13, 2)
+our_cache6.set(1, 2)
+
 """
 Data Structure:
     Read and write operations to do in constant time, we need HashMap. 
     In Python, we have dictionary for this purpose.
     To add entry at the beginning and deletion at the end to maintain the size of cache, 
-    we can use doubly linked list. My solution uses the combination of both.
+    and to maintain the LRU for cache, we can use doubly linked list. 
+    My solution uses the combination of both.
 
 Time Complexity:
     get and set both methods use constant time to do the job. The time complexity is O(1)
