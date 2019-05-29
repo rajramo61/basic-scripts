@@ -29,7 +29,7 @@ For the current problem, you can consider the size of cache = 5.
 
 
 class DLL(object):
-    def __init__(self, key, value):
+    def __init__(self, key=None, value=None):
         self.key = key
         self.value = value
         self.prev = None
@@ -41,8 +41,10 @@ class LRU_Cache(object):
     def __init__(self, capacity):
         # Initialize class variables
         self.capacity = capacity
-        self.head = None
-        self.tail = None
+        self.head = DLL()
+        self.tail = DLL()
+        self.head.next = self.tail
+        self.tail.prev = self.head
         self.table = {}
         pass
 
@@ -51,21 +53,17 @@ class LRU_Cache(object):
         if key in self.table:
             value = self.table.get(key).value
             node = self.table.get(key)
-            if node is self.head:
+            if node is self.head.next:
                 return value
-            elif node is self.tail:
-                self.head.prev = node
-                node.next = self.head
-                self.tail = node.prev
-                self.head = node
-                node.prev = None
             else:
+                # Remove node
                 node.prev.next = node.next
                 node.next.prev = node.prev
-                node.next = self.head
-                self.head.prev = node
-                self.head = node
-                node.prev = None
+                # Add node at the front
+                node.next = self.head.next
+                node.prev = self.head
+                self.head.next.prev = node
+                self.head.next = node
             return value
         else:
             return -1
@@ -77,47 +75,38 @@ class LRU_Cache(object):
             if key in self.table:
                 self.table[key].value = value
                 node = self.table[key]
-                if node is self.head:
+                if node is self.head.next:
                     return
                 else:
-                    if node is self.tail:
-                        temp = self.tail
-                        self.tail = self.tail.prev
-                        self.tail.next = None
-                        temp.next = self.head
-                        self.head.prev = temp
-                        self.head = temp
-                    else:
-                        if node.prev is not None:
-                            node.prev.next = node.next
-                            node.prev.prev = self.head
-                        node.next.prev = node.prev
-                        node.next = self.head
-                        node.prev = None
-                        self.head = node
+                    # Remove node
+                    node.prev.next = node.next
+                    node.next.prev = node.prev
+                    # Add node at the front
+                    node.next = self.head.next
+                    node.prev = self.head
+                    self.head.next.prev = node
+                    self.head.next = node
             else:
                 if self.capacity == len(self.table):
-                    del self.table[self.tail.key]
-                    temp = self.tail
-                    self.tail = self.tail.prev
-                    if self.tail is not None:
-                        self.tail.next = None
-                    temp.prev = None
-                node = DLL(key, value)
-                self.table[key] = node
-                if len(self.table) == 1:
-                    self.head = node
-                    self.tail = node
-                else:
-                    node.next = self.head
-                    self.head.prev = node
-                    self.head = node
+                    del_node = self.tail.prev
+                    del self.table[del_node.key]
+                    del_node.prev.next = self.tail
+                    self.tail.prev = del_node.prev
+
+                # Create new node
+                new_node = DLL(key, value)
+                # Add node to the table
+                self.table[key] = new_node
+                new_node.next = self.head.next
+                new_node.prev = self.head
+                self.head.next.prev = new_node
+                self.head.next = new_node
         pass
 
 
 our_cache = LRU_Cache(5)
 our_cache.set(1, 1)
-our_cache.set(2,2)
+our_cache.set(2, 2)
 our_cache.set(3, 3)
 our_cache.set(4, 4)
 our_cache.set(5, 5)
@@ -131,9 +120,9 @@ print(our_cache.get(9))  # return 9
 
 our_cache2 = LRU_Cache(2)
 our_cache2.set(1, 1)
-our_cache2.set(2,2)
+our_cache2.set(2, 2)
 print(our_cache2.get(1))    # return 1
-our_cache2.set(3,3)
+our_cache2.set(3, 3)
 print(our_cache2.get(2))    # return -1
 
 our_cache3 = LRU_Cache(3)
