@@ -33,6 +33,8 @@ os.path.join(...)
 Note: os.walk() is a handy Python method which can achieve this task very easily.
 However, for this problem you are not allowed to use os.walk().
 """
+import os
+from pathlib import Path
 
 
 def find_files(suffix, path):
@@ -51,5 +53,45 @@ def find_files(suffix, path):
     Returns:
        a list of paths
     """
-    return None
 
+    my_files_ending_extn_in_c = []
+    lookup_dirs = set()
+    lookup_dirs.add(path)
+    # Tail recursion
+    return find_local_files(suffix, my_files_ending_extn_in_c, lookup_dirs)
+
+
+def find_local_files(suffix, my_files_ending_extn_in_c, lookup_dirs):
+    if len(lookup_dirs) == 0:
+        return my_files_ending_extn_in_c
+    local_dirs = set()
+    for directory in lookup_dirs:
+        # delete directory
+        current_dir_files = os.listdir(directory)
+        for name in current_dir_files:
+            file_or_dir = Path(directory + '/' + name)
+            if os.path.isfile(file_or_dir) and name.endswith(suffix):
+                my_files_ending_extn_in_c.append(file_or_dir)
+            if os.path.isdir(file_or_dir):
+                local_dirs.add(str(file_or_dir))
+    # Clean up processed directories
+    lookup_dirs.clear()
+    # Add the new directories
+    lookup_dirs = local_dirs
+    return find_local_files(suffix, my_files_ending_extn_in_c, lookup_dirs)
+
+
+files = find_files('.c', '/Users/rajeshdwivedi/Downloads/testdir/')
+for file in files:
+    print(file)
+
+
+"""
+I have attempted the solution using Tail recursion.
+As we need to print all the files with suffix '.c' and there is nothing which is repeated as the 
+directories and the files are unknown so we can not use memoization.
+
+Time Complexity: O(2^n) where n is the maximum depth 
+Space complexity: O(n) At one time there could be maximum n (maximum directory depth) 
+    function stacks at a time.
+"""

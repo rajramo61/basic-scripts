@@ -15,9 +15,6 @@ def bfs(tree):
                 q.enq(node.get_left_child())
             if node.has_right_child():
                 q.enq(node.get_right_child())
-
-            print(f"visit order: {visit_order}")
-            print(q)
             node = q.deq()
     return visit_order
     pass
