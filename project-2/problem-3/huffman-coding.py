@@ -24,7 +24,14 @@ Decode the text from its compressed form.
 
 import sys
 from queue import PriorityQueue
+from dataclasses import dataclass, field
+from typing import Any
 
+
+@dataclass(order=True)
+class PrioritizedItem:
+    priority: int
+    item: Any = field(compare=False)
 
 
 class HuffmanNode(object):
@@ -37,7 +44,7 @@ class HuffmanNode(object):
         self.is_right_visited = False
 
 
-class Stack():
+class Stack(object):
     def __init__(self):
         self.list = list()
 
@@ -80,7 +87,7 @@ def char_to_frequency_map(sequence):
 
 
 def load_data_to_priority_queue(map):
-    q = PriorityQueue()
+    q = PriorityQueue(100)
     for char in map:
         q.put(map.get(char).freq, map.get(char))
 
@@ -88,7 +95,7 @@ def load_data_to_priority_queue(map):
 
 
 def create_parent_node_of_leaves(n1, n2):
-    parent = HuffmanNode(None, n1.freq + n2.freq)
+    parent = HuffmanNode(None, n1.priority.freq + n2.priority.freq)
     parent.left = n1
     parent.right = n2
     return parent
