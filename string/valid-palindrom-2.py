@@ -14,7 +14,7 @@
 class Solution:
     def validPalindrome(self, s: str) -> bool:
         """
-        Brute Force solution failed
+        Brute Force solution works fine but fails to report the result in time.
         :param s:
         :return:
         """
