@@ -13,47 +13,34 @@
 
 class Solution:
     def validPalindrome(self, s: str) -> bool:
-        """
-        Brute Force solution works fine but fails to report the result in time.
-        :param s:
-        :return:
-        """
-        def validMyPalindrome(s: str) -> bool:
-            if s is None or len(s) < 1:
+        def isPalindrom(input):
+            if s is None or len(input) < 1:
                 return True
-            left = 0
-            right = len(s) - 1
+            l = 0
+            r = len(input) - 1
 
-            while left < right:
-                if s[left] == s[right]:
-                    left += 1
-                    right -= 1
+            while l < r:
+                if input[l] == input[r]:
+                    l += 1
+                    r -= 1
                 else:
                     return False
             return True
 
-        if validMyPalindrome(s):
-            return True
-        left = 0
-        right = len(s) - 1
-        while left < right:
-            input = s
-            if left < 1:
-                input = input[left + 1:]
-            else:
-                input = input[0: left] + input[left + 1:]
-            if validMyPalindrome(input):
+        def checkReduceCheck(input):
+            if len(input) < 2:
                 return True
+            left = 0
+            right = len(input) - 1
+            if input[left] == input[right]:
+                if len(input) == 2 or len(input) == 3:
+                    return True
+                return checkReduceCheck(input[left + 1: right])
             else:
-                input = s
-                if right == len(s) - 1:
-                    input = input[0: left + 1] + input[left + 1: right]
-                else:
-                    input = input[0: left + 1] + input[left + 1: right] + input[right + 1:]
-                if validMyPalindrome(input):
+                if isPalindrom(input[left: right]):
                     return True
                 else:
-                    left += 1
-                    right -= 1
-        return False
+                    return isPalindrom(input[left + 1: right + 1])
+
+        return checkReduceCheck(s)
 
